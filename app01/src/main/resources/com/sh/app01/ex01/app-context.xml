@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+  <!-- Bean (Java 객체)을 만드는 파일 : Spring Bean Configuration File -->
+  <!-- 만들어져있는 class 파일은 bean 태그로 만들어야함 -->
+  
+  <!-- 생성된 Bean 은 Spring Container 에 보관된다. -->
+  
+  <!-- Adder adder = new Adder() -->
+  <bean class="com.sh.app01.ex01.Adder" id ="adder"></bean>
+  
+  <bean class="com.sh.app01.ex01.Subtractor" id ="subtractor"></bean>
+  <!-- java.util.Date  = newjava.util.Date()--> 
+  <bean class="java.util.Date" id="today"> </bean>
+  
+  <bean class="com.sh.app01.ex01.Calculator" id="calculator1">
+    <!-- property 태그는 "setter"를 동작시키기때문에 setter 필수 -->
+    <property name ="maker" value="samsung"> </property>
+    <!-- <value>samsung</value> => 하위태그가 아닌 property 속성으로도 넣을 수 있음 -->
+    <property name ="price" value="5000"/> <!-- 일반 값일땐 value -->
+    <property name ="adder" ref="adder"/>
+    <property name ="subtractor" ref="subtractor"/>
+    <property name ="buied" ref="today"/>
+  </bean>
+  
+   
+    
+
+  <!-- constructor-arg 태그는 "생성자"를 동작시킨다. 생성자의 매개변수 순서대로 값을 저장해야 한다. -->
+  <bean class="com.sh.app01.ex01.Calculator" id="calculator2">
+    <constructor-arg value="LG"></constructor-arg>
+     <!--  <value>LG</value> => 하위태그가 아닌 constructor-arg 속성으로도 넣을 수 있음 -->
+    <constructor-arg value="6000"/> <!-- 일반 값일땐 value -->
+
+    <constructor-arg ref="adder"/>
+    <constructor-arg ref="subtractor"/>
+    <constructor-arg ref="today"/>
+  </bean>
+  
+  
+</beans>
