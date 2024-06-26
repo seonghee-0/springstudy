@@ -52,7 +52,7 @@
     <%-- MvcController4's Path Variable 방식의 요청 파라미터 처리 방식 확인 --%>
     <div>
       <div><a href="${contextPath}/app/users/1">요청1</a></div>
-      <div><a href="${contextPath}/app/members/">요청1</a></div>
+      <div><a href="${contextPath}/app/members">요청1</a></div>
       <div><a href="${contextPath}/app/page/1/sort/DESC">요청3</a></div>
     </div>
     

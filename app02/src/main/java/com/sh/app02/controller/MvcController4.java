@@ -22,7 +22,7 @@ public class MvcController4{
   }
   
   
-  @RequestMapping("/members/{id}")
+  @RequestMapping(value = {"/members","/members/{id}"}) // 값이 있을때와 없을때의 경로 구분해서 작성
   public String members(@PathVariable(value = "id", required = false) Optional<String> opt) {
     int memberId = Integer.parseInt(opt.orElse("1"));
     System.out.println(memberId);
