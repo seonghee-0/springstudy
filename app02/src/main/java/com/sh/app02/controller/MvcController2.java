@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * ${contextPath}/api/board
  * ${contextPath}/api/news
  */
-// 
 
 //   /api 로 시작하는 요청을 담당하는 컨트롤러로 만들기
 //   ( value만 작성하는 경우엔 value (value = "/api")생략이 가능함 )

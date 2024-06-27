@@ -41,8 +41,6 @@ public class MvcController1 {
    *  4.요청 메소드는 method 를 이용한다.
    *    1) method = RequestMethod.GET
    *    1) method = RequestMethod.POST
-   *    
-   *     
    * 
    */
   
