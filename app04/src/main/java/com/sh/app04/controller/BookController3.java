@@ -77,7 +77,6 @@ public class BookController3 {
     // {"isSuccess": true, "inserted": "2024-06-28"}
     return ResponseEntity.ok(Map.of("isSuccess", bookService.insertBook(book) == 1
                 , "inserted", DateTimeFormatter.ofPattern("yyyy-MM-dd").format(LocalDate.now())));
-    
   }
   
   @PutMapping(value = "/api/books", produces = MediaType.APPLICATION_XML_VALUE)

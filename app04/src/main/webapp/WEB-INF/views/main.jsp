@@ -55,13 +55,25 @@
   <script>
   	
   const books = $('#books');
+  const bookNo = $('#bookNo');
+  const title = $('#title');
+  const author = $('#author');
+  const initBtn = $('#init-btn');
+  const registerBtn = $('#register-btn');
+  const modifyBtn = $('#modify-btn');
+  const removeBtn = $('#remove-btn');
+  
+  
+  
   const GetBooks = (url, dataType) => {
   	$.ajax({
   	  type: 'get',
   	  url : '${contextPath}' + url,  
   	  dataType : dataType  // 받아올 데이터타입 (변수)
   	  }).done(resData =>{ // 성공했을 때 처리하는 함수
-  	   books.empty();
+  	   
+  	    books.empty();
+  	  
     	  if(dataType === 'xml'){
         	 // XML
         	  $.each(resData.getElementsByTagName('book'), (i, book)=>{
@@ -73,7 +85,6 @@
        	   	str += '</tr>';
       	    books.append(str);
         	  //console.log(book.getElementsByTagName('bookNo')[0].textContent); //bookNo 에 있는 콘텐츠 텍스트 내용만 가지고오기
-        	
         	 });
   	  	}else if(dataType ==='json'){
   	    }
@@ -82,9 +93,9 @@
     	})
     }
   	 
-  	  /* 
+  	   /*
   	  // json
-  	  books.empty();
+  	 // books.empty();
   	  $.each(resData.books, (i, book)=>{ // resData.books, (인덱스, 요소)=>{
   	    let str = '<tr>';
   	    str += '<td>' + book.bookNo + '</td>'; // book. : 배열에있는 요소 하나씩   	    
@@ -93,13 +104,61 @@
   	    str += '</tr>';
   	    books.append(str);
   	  })
-  	  */
+  	 */
+  	const GetBookByNo = () =>{
+  	  $(document).on('click', '.detail-btn', evt => {
+    		$.ajax({
+    		  type: 'get',
+      	  url : '${contextPath}/api/books/' + evt.target.dataset.bookNo,  
+      	  dataType : 'json'
+    		  }).done(resData=>{
+      	    books.empty();
+    		    bookNo.val(resData.book.bookNo).prop('readonly', true); // 속성값
+    		    title.val(resData.book.title);
+    		    author.val(resData.book.author);
+    		    registerBtn.prop('disabled',true);
+    		    modifyBtn.prop('disabled',false);
+    		    removeBtn.prop('disabled',false);
+    		  }).fail(jqXHR=>{
+    		    alert(jqXHR.responseText);
+				})
+  	  })
+  	}
   	
-  
-  //GetBooks(); // 호출을 해야 main.jsp 동작했을 때 바로 실행이 됨
-	//GetBooks('/api/books','json');
-  //GetBooks('/api/books.json','json');
+
+  const RegisterBook = () =>{
+    registerBtn.on('click',evt=>{
+      $.ajax({
+        type:'post',
+    		url : '${contextPath}/api/books',
+    		contentType: 'application/json', // 내가 보내주는 데이터의 타입
+    		data: JSON.stringify({
+					bookNo: bookNo.val(),
+					title : title.val(),
+					author: author.val()
+   			}),
+   			dataType:'json'
+    	}).done(resData => {
+				if(resData.isSuccess){
+				  alert(resData.inserted + "에 등록되었습니다.");
+				  GetBooks('/api/books.json','json');
+				  initBtn.trigger('click');
+				}else{
+				  alert("책 등록이 실패했습니다");
+				  }
+    	}).fail(jqXHR=>{
+		    alert(jqXHR.responseText);
+    })
+    })
+  }
+
+  // 호출을 해야 main.jsp 동작했을 때 바로 실행이 됨
+  //Init();
+  //GetBooks('/api/books','json');
+  // GetBooks('/api/books.json','json');
   GetBooks('/api/books.xml','xml');
+  GetBookByNo(); 
+  RegisterBook();
   </script>
 
   
