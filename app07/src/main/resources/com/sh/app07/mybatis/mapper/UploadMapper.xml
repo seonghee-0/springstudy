@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.sh.app07.mapper.UploadMapper">  
+  
+<!--  parameterType="UploadDTO" : 서비스가 준 UploadDTO
+    keyProperty="uploadNo"    : 파라미터로 전달된 UploadDTO 의 uploadNo 필드에 시퀀스값(upload_seq.nextval)을 저장하겠다. -->
+ <insert id="insertUpload" parameterType="UploadDTO">
+  <selectKey order="BEFORE" keyProperty="uploadNo" resultType="int"> <!-- Before : 먼저넣겠다. -->
+    SELECT upload_seq.nextval FROM dual
+  </selectKey>
+  INSERT INTO upload_t (
+      upload_no
+    , uploader
+    , ip
+    , upload_dt
+  ) VALUES (
+     #{uploadNo}
+    , #{uploader}
+    , #{ip}
+    , CURRENT_DATE
+  )
+  
+ </insert>
+ 
+ <insert id="insertFile" parameterType="FileDTO">
+   INSERT INTO file_t (
+        file_no
+      , upload_path
+      , original_filename
+      , filesystem_name
+      , upload_no
+    ) VALUES (
+        file_seq.nextval
+      , #{uploadPath}
+      , #{originalFilename}
+      , #{filesystemName}
+      , #{uploadNo}
+    )
+ </insert>
+ 
+ <select id="getUploadList" resultType="UploadDTO">
+    SELECT 
+           u.upload_no
+         , u.uploader
+         , COUNT(f.file_no) AS file_cnt
+      FROM
+           upload_t u LEFT JOIN file_t f
+        ON
+           u.upload_no = f.upload_no
+     GROUP BY
+           u.upload_no, u.uploader
+  </select>
+  
+  <select id="getUploadByNo" parameterType="int" resultType="UploadDTO">
+    SELECT upload_no, uploader, ip, upload_dt
+      FROM upload_t
+     WHERE upload_no = #{uploadNo}
+  </select>
+  
+  <select id="getFileList" parameterType="int" resultType="FileDTO">
+    SELECT file_no, upload_path, original_filename, filesystem_name
+      FROM file_t
+     WHERE upload_no = #{uploadNo}
+  </select>
+  
+</mapper>
