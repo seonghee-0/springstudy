@@ -12,6 +12,7 @@
     <logger name="jdbc"                level="off"></logger>
     <logger name="jdbc.sqltiming"      level="debug"></logger>
     <logger name="jdbc.resultsettable" level="debug"></logger>
+   
     <root level="debug">
       <appender-ref ref="STDOUT" />
     </root>

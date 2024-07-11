@@ -10,4 +10,5 @@ public class MvcController {
   public String main() {
     return "main";
   }
+  
 }

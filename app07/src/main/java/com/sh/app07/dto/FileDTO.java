@@ -5,8 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @Data
 public class FileDTO {
@@ -15,4 +15,5 @@ public class FileDTO {
   private String originalFilename;
   private String filesystemName;
   private int uploadNo;
+  private int downCount;
 }

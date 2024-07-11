@@ -12,6 +12,9 @@ public interface UploadMapper {
   int insertUpload(UploadDTO upload);
   int insertFile(FileDTO file);
   List<UploadDTO> getUploadList();
- UploadDTO getUploadByNo(int uploadNo);
- List<FileDTO> getFileList(int uploadNo);
+  UploadDTO getUploadByNo(int uploadNo);
+  List<FileDTO> getFileList(int uploadNo);
+  FileDTO getFileByNo(int fileNo);
+  int updateDownCount(int fileNo);
+  int updateDownCountAll(int uploadNo);
 }

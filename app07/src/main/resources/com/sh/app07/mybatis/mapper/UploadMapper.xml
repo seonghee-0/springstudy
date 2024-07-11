@@ -8,40 +8,41 @@
 <!--  parameterType="UploadDTO" : 서비스가 준 UploadDTO
     keyProperty="uploadNo"    : 파라미터로 전달된 UploadDTO 의 uploadNo 필드에 시퀀스값(upload_seq.nextval)을 저장하겠다. -->
  <insert id="insertUpload" parameterType="UploadDTO">
-  <selectKey order="BEFORE" keyProperty="uploadNo" resultType="int"> <!-- Before : 먼저넣겠다. -->
-    SELECT upload_seq.nextval FROM dual
-  </selectKey>
-  INSERT INTO upload_t (
-      upload_no
-    , uploader
-    , ip
-    , upload_dt
-  ) VALUES (
-     #{uploadNo}
-    , #{uploader}
-    , #{ip}
-    , CURRENT_DATE
-  )
+ <selectKey order="BEFORE" keyProperty="uploadNo" resultType="int">
+      SELECT upload_seq.nextval FROM dual
+    </selectKey>
+    INSERT INTO upload_t (
+        upload_no
+      , uploader
+      , ip
+      , upload_dt
+    ) VALUES (
+        #{uploadNo}
+      , #{uploader}
+      , #{ip}
+      , CURRENT_DATE
+    )
+  </insert>
   
- </insert>
- 
- <insert id="insertFile" parameterType="FileDTO">
-   INSERT INTO file_t (
+  <insert id="insertFile" parameterType="FileDTO">
+    INSERT INTO file_t (
         file_no
       , upload_path
       , original_filename
       , filesystem_name
       , upload_no
+      , down_count
     ) VALUES (
         file_seq.nextval
       , #{uploadPath}
       , #{originalFilename}
       , #{filesystemName}
       , #{uploadNo}
+      , 0
     )
- </insert>
- 
- <select id="getUploadList" resultType="UploadDTO">
+  </insert>
+  
+  <select id="getUploadList" resultType="UploadDTO">
     SELECT 
            u.upload_no
          , u.uploader
@@ -61,9 +62,27 @@
   </select>
   
   <select id="getFileList" parameterType="int" resultType="FileDTO">
-    SELECT file_no, upload_path, original_filename, filesystem_name
+    SELECT file_no, upload_path, original_filename, filesystem_name, down_count
       FROM file_t
      WHERE upload_no = #{uploadNo}
   </select>
+  
+  <select id="getFileByNo" parameterType="int" resultType="FileDTO">
+    SELECT file_no, upload_path, original_filename, filesystem_name, down_count
+      FROM file_t
+     WHERE file_no = #{fileNo}
+  </select>
+  
+  <update id="updateDownCount" parameterType="int">
+    UPDATE file_t
+       SET down_count = down_count + 1
+     WHERE file_no = #{fileNo}
+  </update>
+
+  <update id="updateDownCountAll" parameterType="int">
+    UPDATE file_t
+       SET down_count = down_count + 1
+     WHERE upload_no = #{uploadNo}
+  </update>
   
 </mapper>
