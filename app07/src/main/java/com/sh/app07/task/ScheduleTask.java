@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.min.app07.service.IUploadService;
+import com.sh.app07.service.IUploadService;
 
 @Component
 public class ScheduleTask {
