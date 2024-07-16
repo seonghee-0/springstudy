@@ -35,6 +35,78 @@ public class PageUtils {
     endPage = Math.min(beginPage + pagePerBlock - 1, totalPage);
     
   }
+  /* getPaging 오버로딩해서 사용해도 좋다. (오버로딩 : 같은메소드이름을 여러번 사용가능 (매개변수 개수 또는 타입 달라야함!)) */
+  public String getPaging(String requestURI) {
+    
+    StringBuilder builder = new StringBuilder();
+    
+    // <div>
+    builder.append("<div class=\"paging\">");
+    
+    // <
+    if(beginPage == 1)
+      builder.append("<button type=\"button\" style=\"color: silver;\">&lt;</button>");
+    else
+      builder.append("<button type=\"button\" onclick=\"location.href='" + requestURI + "?page=" + (beginPage - 1) + "'\">&lt;</button>");
+    
+    // 1 2 3 4 5 6 7 8 9 10
+    for(int p = beginPage; p <= endPage; p++) {
+      if(p == page) {
+        builder.append("<button type=\"button\" style=\"color: limegreen;\" onclick=\"location.href='" + requestURI + "?page=" + (p) + "'\">" + p + "</button>");
+      } else {
+        builder.append("<button type=\"button\" onclick=\"location.href='" + requestURI + "?page=" + (p) + "'\">" + p + "</button>");        
+      }
+    }
+    
+    // >
+    if(endPage == totalPage) {
+      builder.append("<button type=\"button\" style=\"color: silver;\">&gt;</button>");
+    } else {
+      builder.append("<button type=\"button\" onclick=\"location.href='" + requestURI + "?page=" + (endPage + 1) + "'\">&gt;</button>");
+    }
+    
+    // </div>
+    builder.append("</div>");
+    
+    return builder.toString();
+    
+  }
+  
+  public String getPaging(String requestURI, String sort, int display) {
+    
+    StringBuilder builder = new StringBuilder();
+    
+    // <div>
+    builder.append("<div class=\"paging\">");
+    
+    // <
+    if(beginPage == 1)
+      builder.append("<button type=\"button\" style=\"color: silver;\">&lt;</button>");
+    else
+      builder.append("<button type=\"button\" onclick=\"location.href='" + requestURI + "?page=" + (beginPage - 1) + "&sort=" + sort + "&display=" + display + "'\">&lt;</button>");
+    
+    // 1 2 3 4 5 6 7 8 9 10
+    for(int p = beginPage; p <= endPage; p++) {
+      if(p == page) {
+        builder.append("<button type=\"button\" style=\"color: limegreen;\" onclick=\"location.href='" + requestURI + "?page=" + (p) + "&sort=" + sort + "&display=" + display + "'\">" + p + "</button>");
+      } else {
+        builder.append("<button type=\"button\" onclick=\"location.href='" + requestURI + "?page=" + (p) + "&sort=" + sort + "&display=" + display + "'\">" + p + "</button>");        
+      }
+    }
+    
+    // >
+    if(endPage == totalPage) {
+      builder.append("<button type=\"button\" style=\"color: silver;\">&gt;</button>");
+    } else {
+      builder.append("<button type=\"button\" onclick=\"location.href='" + requestURI + "?page=" + (endPage + 1) + "&sort=" + sort + "&display=" + display + "'\">&gt;</button>");
+    }
+    
+    // </div>
+    builder.append("</div>");
+    
+    return builder.toString();
+    
+  }
   
   public String getPaging(String requestURI, String sort, int display, String condition) {
     
@@ -47,14 +119,14 @@ public class PageUtils {
     if(beginPage == 1)
       builder.append("<button type=\"button\" style=\"color: silver;\">&lt;</button>");
     else
-      builder.append("<button type=\"button\" onclick=\"location.href='"+requestURI+"?page=" + (beginPage-1) + "&sort=" + sort + "&display=" + display + "&" + condition + "'\">&lt;</button>");
+      builder.append("<button type=\"button\" onclick=\"location.href='" + requestURI + "?page=" + (beginPage - 1) + "&sort=" + sort + "&display=" + display + "&" + condition + "'\">&lt;</button>");
     
     // 1 2 3 4 5 6 7 8 9 10
     for(int p = beginPage; p <= endPage; p++) {
       if(p == page) {
-        builder.append("<button type=\"button\" style=\"color: limegreen;\" onclick=\"location.href='"+requestURI+"?page="+(p)+"&sort="+sort+"&display="+display + "&" + condition + "'\">"+p+"</button>");
+        builder.append("<button type=\"button\" style=\"color: limegreen;\" onclick=\"location.href='" + requestURI + "?page=" + (p) + "&sort=" + sort + "&display=" + display + "&" + condition + "'\">" + p + "</button>");
       } else {
-        builder.append("<button type=\"button\" onclick=\"location.href='"+requestURI+"?page="+(p)+"&sort="+sort+"&display="+display+"&" + condition + "'\">"+p+"</button>");        
+        builder.append("<button type=\"button\" onclick=\"location.href='" + requestURI + "?page=" + (p) + "&sort=" + sort + "&display=" + display + "&" + condition + "'\">" + p + "</button>");        
       }
     }
     
@@ -62,7 +134,43 @@ public class PageUtils {
     if(endPage == totalPage) {
       builder.append("<button type=\"button\" style=\"color: silver;\">&gt;</button>");
     } else {
-      builder.append("<button type=\"button\" onclick=\"location.href='"+requestURI+"?page="+(endPage+1)+"&sort="+sort+"&display="+display+"&" + condition + "'\">&gt;</button>");
+      builder.append("<button type=\"button\" onclick=\"location.href='" + requestURI + "?page=" + (endPage + 1) + "&sort=" + sort + "&display=" + display + "&" + condition + "'\">&gt;</button>");
+    }
+    
+    // </div>
+    builder.append("</div>");
+    
+    return builder.toString();
+    
+  }
+  
+  public String getAsyncPaging() {
+    
+    StringBuilder builder = new StringBuilder();
+    
+    // <div>
+    builder.append("<div class=\"paging\">");
+    
+    // <
+    if(beginPage == 1)
+      builder.append("<button type=\"button\" style=\"color: silver;\">&lt;</button>");
+    else
+      builder.append("<button type=\"button\" onclick=\"paging(" + (beginPage - 1) + ")\">&lt;</button>");
+    
+    // 1 2 3 4 5 6 7 8 9 10
+    for(int p = beginPage; p <= endPage; p++) {
+      if(p == page) {
+        builder.append("<button type=\"button\" style=\"color: limegreen;\" onclick=\"paging(" + p + ")\">" + p + "</button>");
+      } else {
+        builder.append("<button type=\"button\" onclick=\"paging(" + p + ")\">" + p + "</button>");        
+      }
+    }
+    
+    // >
+    if(endPage == totalPage) {
+      builder.append("<button type=\"button\" style=\"color: silver;\">&gt;</button>");
+    } else {
+      builder.append("<button type=\"button\" onclick=\"paging(" + (endPage + 1) + ")\">&gt;</button>");
     }
     
     // </div>

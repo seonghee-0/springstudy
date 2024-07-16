@@ -5,42 +5,52 @@
   
 <mapper namespace="com.min.boot.mapper.IBlogMapper">
 
-   <insert id="insertBlog" parameterType="BlogDTO">
-    <selectKey keyProperty="blogNo" resultType="int" order="BEFORE"> <!-- insert 수행 전(BEFORE)에 이거 먼저 처리한다 -->
-      SELECT blog_seq.NEXTVAL FROM dual 
+  <insert id="insertBlog" parameterType="BlogDTO">
+    <selectKey keyProperty="blogNo" resultType="int" order="BEFORE">
+      SELECT blog_seq.NEXTVAL FROM dual
     </selectKey>
     INSERT INTO blog_t (
-      blog_no
-    , title
-    , contents
-    , hit
-    , user_no
-    , create_dt
-    , modify_dt
-    )VALUES(
-      #{blogNo}
-      ,#{title}
-      ,#{contents}
-      ,0
-      ,#{userNo}
-      ,CURRENT_DATE
-      ,CURRENT_DATE
+        blog_no
+      , title
+      , contents
+      , hit
+      , user_no
+      , create_dt
+      , modify_dt
+    ) VALUES (
+        #{blogNo}
+      , #{title}
+      , #{contents}
+      , 0
+      , #{userNo}
+      , CURRENT_DATE
+      , CURRENT_DATE
     )
-   </insert> 
-  
-  
-  <insert id="insertSummernoteImage" parameterType="ImageDTO">  
+  </insert>
+
+  <insert id="insertSummernoteImage" parameterType="ImageDTO">
     INSERT INTO image_t (
         blog_no
       , upload_path
       , filesystem_name
-    )VALUES(
+    ) VALUES (
         #{blogNo}
-        #{uploadPath}
-        #{filesystemName}
+      , #{uploadPath}
+      , #{filesystemName}
     )
-       
   </insert>
   
+  <select id="getBlogCount" resultType="int">
+    SELECT COUNT(*)
+      FROM blog_t
+  </select>
+  
+  <select id="getBlogList" parameterType="Map" resultType="BlogDTO">
+    SELECT blog_no, title, contents, hit, user_no, create_dt, modify_dt, name, email
+      FROM (SELECT ROW_NUMBER() OVER(ORDER BY blog_no DESC) AS rnum, B.blog_no, B.title, B.contents, B.hit, B.user_no, B.create_dt, B.modify_dt, U.name, U.email
+              FROM user_t U INNER JOIN blog_t B
+                ON U.user_no = B.user_no)
+     WHERE rnum BETWEEN #{begin} AND #{end}
+  </select>
   
 </mapper>

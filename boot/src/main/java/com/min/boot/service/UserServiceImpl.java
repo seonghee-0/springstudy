@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.http.ResponseEntity;
 // import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.min.boot.dto.UserDTO;
 import com.min.boot.mapper.IUserMapper;
@@ -14,7 +15,7 @@ import com.min.boot.utils.SecurityUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-
+@Transactional
 @RequiredArgsConstructor
 @Service
 public class UserServiceImpl implements IUserService {

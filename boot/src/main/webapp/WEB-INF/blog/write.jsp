@@ -41,36 +41,32 @@ $('#contents').summernote({
     ['height', ['height']],
     ['insert', ['link', 'picture', 'video']]
   ],
-  width:1024,
-  height:500,
+  width: 1024,
+  height: 500,
   lang: 'ko-KR',
   callbacks: {
-    onImageUpload: function(files) { //files: 추가한 이미지
-      // files를 업로드하는 ajax 처리
-      for (let i = 0; i < files.length; i++){
-        
-        console.log(files[i]);
+    onImageUpload: function(files) {  // files : 추가한 이미지
+      // files 를 업로드하는 ajax 처리
+      for(let i = 0; i < files.length; i++){
         // FormData 객체 생성
-        let formData = new FormData();         /* <form> 만들기*/
-        // FormData 객체에 이미지 저장하기     
-        formData.append('file',files[i]); 		 /* <input name="file" type="file"> */
-				// FormData 객체 처리
+        let formData = new FormData();       /* <form> */
+        // FormData 객체에 이미지 저장하기
+        formData.append('file', files[i]);   /* <input name="file" type="file"> */
+        // FormData 객체 처리
         $.ajax({
-          // FormData 객체를 서버로 보내기(이미지를 서버로 보내기)
-          type:'post',
-          url :'${contextPath}/blog/summernote/imageUpload.do',
-          data: formData,     /* 서버로 보내는 데이터 */
-          contentType: false, /* Content-Type 헤더 값 생성 방지 */
-          processData: false, /* 객체를 보내는 경우 해당 객체를 {property: value} 형식의 문자열로 자동으로 변환해서 보내는데 이를 방지해야 한다. */
-          
-          // 서버가 저장한 이미지의 경로와 이름을 반환 받기 
-          dataType: 'json'
-        }).done(resData=>{//ajax 끝 resData == {url:'경로', filename:'파일명'}   (받아온 데이터 이름은 resData로 하겠다)
-        	
-          //summernote 편집기에 이미지 표시하기
-        	$('#contents').summernote('insertImage', resData.url, resData.filename);
+	      // FormData 객체를 서버로 보내기 (이미지를 서버로 보내기)
+          type: 'post',
+          url: '${contextPath}/blog/summernote/imageUpload.do',
+          data: formData,
+          contentType: false,  /* Content-Type 헤더 값 생성 방지 */
+          processData: false,  /* 객체를 보내는 경우 해당 객체를 {property: value} 형식의 문자열로 자동으로 변환해서 보내는데 이를 방지해야 한다. */
+	      // 서버가 저장한 이미지의 경로와 이름을 반환 받기
+	      dataType: 'json'
+        }).done(resData=>{  // resData == {url: '/경로/파일명'}
+	      // summernote 편집기에 이미지 표시하기
+          $('#contents').summernote('insertImage', resData.url);
         })
-      } 
+      }
     }
   }
 });

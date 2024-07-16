@@ -60,8 +60,7 @@
           </tr>
           <tr class="reply-form show${vs.index} hidden">
             <td colspan="3">
-              <form method="post"
-                    action="${contextPath}/bbs/saveChild.do">
+              <form method="post" action="${contextPath}/bbs/saveChild.do">
                 <!-- 원글(부모)의 depth, group_no, group_order -->
                 <input type="hidden" name="depth" value="${bbs.depth}">
                 <input type="hidden" name="groupNo" value="${bbs.groupNo}">

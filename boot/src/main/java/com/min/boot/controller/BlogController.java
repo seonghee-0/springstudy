@@ -14,6 +14,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.min.boot.dto.BlogDTO;
 import com.min.boot.service.IBlogService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
@@ -35,16 +36,20 @@ public class BlogController {
     return "blog/write";
   }
   
-  @PostMapping(value="/summernote/imageUpload.do", produces="application/json") // json 반환
-    public ResponseEntity<Map<String, Object>> summernoteImageUploadDo(@RequestParam("file") MultipartFile multipartFile) {
+  @PostMapping(value = "/summernote/imageUpload.do", produces = "application/json") // json반환
+  public ResponseEntity<Map<String, Object>> summernoteImageUploadDo(@RequestParam("file") MultipartFile multipartFile) {
     return blogService.summernoteImageUpload(multipartFile);
   }
-
-  @PostMapping(value="/saveBlog.do")
-  public String saveBlogDo(BlogDTO blogDTO, HttpSession session, RedirectAttributes rttr ) {
-    rttr.addFlashAttribute("saveBlogMessage",blogService.saveBlog(blogDTO, session) == 1?"블로그 추가 성공" : "블로그 추가 실패 "); //결과가 1이면 추가 성공 아니면 실패
+  
+  @PostMapping(value = "/saveBlog.do")
+  public String saveBlogDo(BlogDTO blogDTO, HttpSession session, RedirectAttributes rttr) {
+    rttr.addFlashAttribute("saveBlogMessage", blogService.saveBlog(blogDTO, session) == 1 ? "블로그 추가 성공" : "블로그 추가 실패");
     return "redirect:/blog/list.do";
   }
   
+  @GetMapping(value = "/getBlogList.do", produces = "application/json")
+  public ResponseEntity<Map<String, Object>> getBlogListDo(HttpServletRequest request) {
+    return blogService.getBlogList(request);
+  }
   
 }

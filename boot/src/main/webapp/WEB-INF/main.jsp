@@ -10,9 +10,12 @@
 
   <h1> Welcome To My Home</h1>
   <script>
-  	if('${signupMessage}' !== ''){//
-  		alert('${signupMessage}');
-  	}
+    if('${signupMessage}' !== ''){
+      alert('${signupMessage}');
+    }
+    if('${leaveMessage}' !== ''){
+      alert('${leaveMessage}');
+    }
   </script>
   
 <%@ include file="./layout/footer.jsp" %> <%--상대 주소 작성해야함 ${contextPath} X --%>

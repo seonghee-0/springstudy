@@ -25,6 +25,7 @@ public class SigninCheck implements HandlerInterceptor {
     
     HttpSession session = request.getSession();
     UserDTO loginUser = (UserDTO)session.getAttribute("loginUser");
+    
     if(loginUser == null) { // loginUser 가 null 이면
       
       // 1) 가입페이지로 바로 이동시키기
@@ -34,12 +35,12 @@ public class SigninCheck implements HandlerInterceptor {
       response.setContentType("text/html; charset=UTF-8");
       PrintWriter out = response.getWriter();
       out.println("<script>");
-      out.print("if(confirm('로그인이 필요한 기능입니다. 로그인 페이지로 이동할까요?')){");
-      out.print("   location.href='"+request.getContextPath()+"/user/signin.page'");
-      out.print(" }else{ ");
-      out.print("  alert('요청이 취소되었습니다.')");
-      out.print("  history.back()");
-      out.print(" }");
+      out.println("if(confirm('로그인이 필요한 기능입니다. 로그인 페이지로 이동할까요?')){");
+      out.println("  location.href = '" + request.getContextPath() + "/user/signin.page'");
+      out.println("} else {");
+      out.println("  alert('요청이 취소되었습니다.')");
+      out.println("  history.back()");
+      out.println("}");
       out.println("</script>");
       out.close();
   
